@@ -55,7 +55,7 @@ namespace LabWork_7
             // Обновляем оценку у студента по предмету
             grades[student][subject] = grade;
         }
-
+        // Метод для удаления студента
         public void DeleteStudent(string student)
         {
             // Проверяем существует ли студент
