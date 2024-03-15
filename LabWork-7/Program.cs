@@ -15,9 +15,12 @@ namespace Lab_Work_7
             studentScores.AddScore("Bob", "Math", 80);
             studentScores.AddScore("Bob", "Physics", 70);
 
-            // Получаем средний балл
-            Console.WriteLine("Average score for Alice: " + studentScores.GetAverageScore("Alice"));
-            Console.WriteLine("Average score for Bob: " + studentScores.GetAverageScore("Bob"));
+            // Вывод баллов студентов
+            studentScores.PrintStudentScore("Alice");
+            studentScores.PrintStudentScore("Bob");
+            Console.WriteLine("----------------------------------------------------");
+            // Вывод словаря
+            studentScores.PrintDictionary();
         }
     }
 }
