@@ -6,7 +6,7 @@ namespace Lab_Work_7
     {
         public static void Main(string[] args)
         {
-            // LabWork7();
+            LabWork7();
 
             //Загрузка словаря из сохраненого файла в методе LabWork7()
             StudentScores studentScores1 = StudentDataStorage.Load();
@@ -16,7 +16,7 @@ namespace Lab_Work_7
 
         /*
             Статический метод LabWork7 это часть кода из Лабораторной роботы 7,
-            который был вынесем в отдельный метод для удобста демонстрации загрузки словаря из файла.
+            который был вынесен в отдельный метод для удобста демонстрации загрузки словаря из файла.
         */
         public static void LabWork7()
         {
