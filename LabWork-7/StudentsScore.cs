@@ -110,12 +110,45 @@ namespace LabWork_7
             }
         }
 
+        // Метод для вывода всех оценок всех студентов в словаре
         public void PrintDictionary()
         {
+            // Итерируемся по всем студентам в словаре и выводим их оценки
             foreach (var student in grades)
             {
+                // Вызываем метод PrintStudentScore для каждого студента
                 PrintStudentScore(student.Key);
             }
+        }
+
+        // Метод для получения словаря оценок (используется для сериализации/десериализации)
+        public Dictionary<string, Dictionary<string, int>> GetGrades()
+        {
+            return this.grades;
+        }
+
+        // Метод для установки словаря оценок (используется для десериализации)
+        public void SetGrades(Dictionary<string, Dictionary<string, int>> dictionary)
+        {
+            this.grades = dictionary;
+        }
+
+        // Переопределение метода ToString для формирования текстового представления оценок
+        public override string ToString()
+        {
+            string result = "Student Grades:\n";
+
+            // Итерируемся по всем студентам и их оценкам в словаре
+            foreach (var student in grades)
+            {
+                result += $"{student.Key}:\n";
+                foreach (var subject in student.Value)
+                {
+                    result += $"-{subject.Key}: {subject.Value}\n";
+                }
+            }
+
+            return result;
         }
     }
 }
