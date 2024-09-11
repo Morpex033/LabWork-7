@@ -11,6 +11,8 @@ namespace LabWork_7
         // Словарь для хранения оценок студентов
         private Dictionary<string, Dictionary<string, int>> grades;
 
+        public Dictionary<string, Dictionary<string, int>> Grades {  get { return grades; } }
+
         // Конструктор класса
         public StudentScores()
         {
@@ -37,6 +39,7 @@ namespace LabWork_7
             // Добавляем оценку студенту по предмету
             grades[student][subject] = grade;
         }
+
         // Метод для изменения оценки студента по предмету
         public void EditScore(string student, string subject, int grade)
         {
@@ -55,6 +58,7 @@ namespace LabWork_7
             // Обновляем оценку у студента по предмету
             grades[student][subject] = grade;
         }
+
         // Метод для удаления студента
         public void DeleteStudent(string student)
         {
@@ -86,6 +90,7 @@ namespace LabWork_7
                 throw new Exception($"The {student} does not exists");
             }
         }
+
         // Принт в консоль оценок студента
         public void PrintStudentScore(string student)
         {
@@ -113,12 +118,14 @@ namespace LabWork_7
         // Метод для вывода всех оценок всех студентов в словаре
         public void PrintDictionary()
         {
+            System.Console.WriteLine("--------------------------");
             // Итерируемся по всем студентам в словаре и выводим их оценки
             foreach (var student in grades)
             {
                 // Вызываем метод PrintStudentScore для каждого студента
                 PrintStudentScore(student.Key);
             }
+            System.Console.WriteLine("--------------------------");
         }
 
         // Метод для получения словаря оценок (используется для сериализации/десериализации)
@@ -150,5 +157,71 @@ namespace LabWork_7
 
             return result;
         }
+
+        // Сортировка словаря в алфавитном порядке по студентам
+        public static Dictionary<string, Dictionary<string, int>> SortByStudent(StudentScores studentScores)
+        {
+            return studentScores.Grades
+                .OrderBy(kvp => kvp.Key)
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToDictionary(v => v.Key, v => v.Value));
+        }
+        // Сортировка словаря в обратном алфавитном порядке по студентам
+        public static Dictionary<string, Dictionary<string, int>> ReverseSortByStudent(StudentScores studentScores)
+        {
+            return studentScores.Grades
+                .OrderByDescending(kvp => kvp.Key)
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ToDictionary(v => v.Key, v => v.Value));
+        }
+        // Сортировка словаря в алфавитном порядке по предметам
+        public static Dictionary<string, Dictionary<string, int>> SortBySubject(StudentScores studentScores)
+        {
+            return studentScores.Grades
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.OrderBy(v => v.Key).ToDictionary(v => v.Key, v => v.Value));
+        }
+        // Сортировка словаря в обратном алфавитном порядке по предметам
+        public static Dictionary<string, Dictionary<string, int>> ReverseSortBySubject(StudentScores studentScores)
+        {
+            return studentScores.Grades
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.OrderByDescending(v => v.Key).ToDictionary(v => v.Key, v => v.Value));
+        }
+        // Сортировка словаря по оценкам от меньшего к большему
+        public static Dictionary<string, Dictionary<string, int>> SortByGrades(StudentScores studentScores)
+        {
+            return studentScores.Grades
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.OrderBy(v => v.Value).ToDictionary(v => v.Key, v => v.Value));
+        }
+        // Сортировка словаря по оценкам от большего к меньшему
+        public static Dictionary<string, Dictionary<string, int>> ReverseSortByGrades(StudentScores studentScores)
+        {
+            return studentScores.Grades
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.OrderByDescending(v => v.Value).ToDictionary(v => v.Key, v => v.Value));
+        }
+        // Фильтрация словаря по студенту. Предмет и минимальная оценка опциональны.
+        public static Dictionary<string, Dictionary<string, int>> FilterStudent(StudentScores studentScores, string student, string? optionalSubject = null, int optionalGrade = 0)
+        {
+            // Проверяем, есть ли указанный студент в словаре
+            if (!studentScores.Grades.ContainsKey(student))
+            {
+                // Если студент не найден, возвращаем пустой словарь
+                return new Dictionary<string, Dictionary<string, int>>();
+            }
+
+            // Получаем оценки студента
+            var studentGrades = studentScores.Grades[student];
+
+            // Если фильтруется по предмету и минимальной оценке
+            var filteredGrades = studentGrades
+                .Where(subjectGrade =>
+                    (optionalSubject == null || subjectGrade.Key == optionalSubject) &&
+                    subjectGrade.Value >= optionalGrade)
+                .ToDictionary(subjectGrade => subjectGrade.Key, subjectGrade => subjectGrade.Value);
+
+            // Возвращаем фильтрованный результат
+            return new Dictionary<string, Dictionary<string, int>>
+                {
+                    { student, filteredGrades }
+                };
+        }
+
     }
 }
